@@ -36,6 +36,8 @@ Template.createCombinedFlex.helpers
 		return if RocketChat.authz.hasAllPermission ['create-c', 'create-p'] then '' else 'disabled'
 	privateSwitchChecked: ->
 		return if RocketChat.authz.hasAllPermission 'create-c' then '' else 'checked'
+	privateSwitchHidden: ->
+		return if RocketChat.authz.hasAllPermission ['create-c', 'create-p'] then '' else 'hidden'
 
 Template.createCombinedFlex.events
 	'autocompleteselect #channel-members': (event, instance, doc) ->

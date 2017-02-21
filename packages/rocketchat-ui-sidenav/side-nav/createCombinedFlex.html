@@ -11,7 +11,7 @@
 				<span>{{_ "Name"}}</span>
 				<input type="text" id="channel-name" class="required" dir="auto" placeholder="{{_ 'Enter_name_here'}}">
 			</div>
-			<div class="input-line toggle">
+			<div class="input-line toggle {{privateSwitchHidden}}">
 				<span>{{_ "Private"}}</span>
 				<div class="input checkbox toggle">
 					<input type="checkbox" id="channel-type" {{privateSwitchDisabled}} {{privateSwitchChecked}}>
