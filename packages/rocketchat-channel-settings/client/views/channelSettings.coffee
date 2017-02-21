@@ -240,8 +240,8 @@ Template.channelSettings.onCreated ->
 		joinCode:
 			type: 'text'
 			label: 'Password'
-			canView: (room) => room.t is 'c' and RocketChat.authz.hasAllPermission('edit-room', room._id)
-			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canView: (room) => false # room.t is 'c' and RocketChat.authz.hasAllPermission('edit-room', room._id)
+			canEdit: (room) => false # RocketChat.authz.hasAllPermission('edit-room', room._id)
 			save: (value, room) ->
 				Meteor.call 'saveRoomSettings', room._id, 'joinCode', value, (err, result) ->
 					return handleError err if err
