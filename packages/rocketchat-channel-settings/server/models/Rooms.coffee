@@ -34,6 +34,16 @@ RocketChat.models.Rooms.setReadOnlyById = (_id, readOnly) ->
 
 	return @update query, update
 
+RocketChat.models.Rooms.setUnjoinableById = (_id, unjoinable) ->
+	query =
+		_id: _id
+
+	update =
+		$set:
+			unjoinable: unjoinable
+
+	return @update query, update
+
 RocketChat.models.Rooms.setAllowReactingWhenReadOnlyById = (_id, allowReacting) ->
 	query =
 		_id: _id

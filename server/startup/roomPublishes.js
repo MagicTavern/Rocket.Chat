@@ -15,7 +15,8 @@ Meteor.startup(function() {
 				jitsiTimeout: 1,
 				description: 1,
 				sysMes: 1,
-				joinCodeRequired: 1
+				joinCodeRequired: 1,
+				unjoinable: 1
 			}
 		};
 

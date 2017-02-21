@@ -36,6 +36,9 @@ Template.adminRoomInfo.helpers
 	readOnly: ->
 		room = AdminChatRoom.findOne(@rid, { fields: { ro: 1 }})
 		return room?.ro
+	unjoinable: ->
+		room = AdminChatRoom.findOne(@rid, { fields: {unjoinable: 1}})
+		return room?.unjoinable
 	readOnlyDescription: ->
 		room = AdminChatRoom.findOne(@rid, { fields: { ro: 1 }})
 		readOnly = room?.ro

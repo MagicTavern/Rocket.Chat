@@ -46,6 +46,9 @@ Template.channelSettings.helpers
 	readOnly: ->
 		return  ChatRoom.findOne(@rid, { fields: { ro: 1 }})?.ro
 
+	unjoinable: ->
+		return  ChatRoom.findOne(@rid, { fields: { unjoinable: 1 }})?.unjoinable
+
 	readOnlyDescription: ->
 		readOnly = ChatRoom.findOne(@rid, { fields: { ro: 1 }})?.ro
 		if readOnly is true
@@ -201,6 +204,20 @@ Template.channelSettings.onCreated ->
 				Meteor.call 'saveRoomSettings', room._id, 'reactWhenReadOnly', value, (err, result) ->
 					return handleError err if err
 					toastr.success TAPi18n.__ 'React_when_read_only_changed_successfully'
+
+		unjoinable:
+			type: 'boolean'
+			label: 'Unjoinable'
+			isToggle: true
+			processing: new ReactiveVar(false)
+			canView: (room) => room.t is 'c'
+			canEdit: (room) => RocketChat.authz.hasAllPermission('edit-room', room._id)
+			save: (value, room) ->
+				@processing.set(true)
+				Meteor.call 'saveRoomSettings', room._id, 'unjoinable', value, (err, result) =>
+					return handleError err if err
+					@processing.set(false)
+					toastr.success TAPi18n.__ 'Unjoinable_changed_successfully'
 
 		archived:
 			type: 'boolean'

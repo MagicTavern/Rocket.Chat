@@ -114,14 +114,20 @@
 		{{#with notSubscribedTpl}}
 			{{> Template.dynamic . }}
 		{{else}}
-			{{#if canJoin}}
+			{{#if unjoinable}}
 			<div>
-				{{{_ "you_are_in_preview_mode_of" room_name=roomName}}}
-				{{#if joinCodeRequired}}
-					<input type="text" name="joinCode" placeholder="{{_ 'Code'}}" style="width: 100px">
-				{{/if}}
-				<button class="button join"><span><i class="icon-login"></i> {{_ "join"}}</span></button>
+				{{{_ "room_not_joinable" room_name=roomName}}}
 			</div>
+			{{else}}
+				{{#if canJoin}}
+				<div>
+					{{{_ "you_are_in_preview_mode_of" room_name=roomName}}}
+					{{#if joinCodeRequired}}
+					<input type="text" name="joinCode" placeholder="{{_ 'Code'}}" style="width: 100px">
+					{{/if}}
+					<button class="button join"><span><i class="icon-login"></i> {{_ "join"}}</span></button>
+				</div>
+				{{/if}}
 			{{/if}}
 		{{/with}}
 	{{/if}}

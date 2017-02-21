@@ -29,6 +29,8 @@ Template.messageBox.helpers
 		return RocketChat.settings.get('Message_ShowFormattingTips') and (RocketChat.Markdown or RocketChat.MarkdownCode or katexSyntax())
 	canJoin: ->
 		return RocketChat.roomTypes.verifyShowJoinLink @_id
+	unjoinable: ->
+		return RocketChat.roomTypes.unjoinable @_id
 	joinCodeRequired: ->
 		return Session.get('roomData' + this._id)?.joinCodeRequired
 	subscribed: ->

@@ -6,7 +6,7 @@ Meteor.methods
 		unless Match.test rid, String
 			throw new Meteor.Error 'error-invalid-room', 'Invalid room', { method: 'saveRoomSettings' }
 
-		if setting not in ['roomName', 'roomTopic', 'roomDescription', 'roomType', 'readOnly', 'reactWhenReadOnly', 'systemMessages', 'default', 'joinCode']
+		if setting not in ['roomName', 'roomTopic', 'roomDescription', 'roomType', 'readOnly', 'reactWhenReadOnly', 'systemMessages', 'default', 'joinCode', 'unjoinable']
 			throw new Meteor.Error 'error-invalid-settings', 'Invalid settings provided', { method: 'saveRoomSettings' }
 
 		unless RocketChat.authz.hasPermission(Meteor.userId(), 'edit-room', rid)
@@ -46,6 +46,8 @@ Meteor.methods
 						RocketChat.saveRoomSystemMessages rid, value, Meteor.user()
 				when 'joinCode'
 					RocketChat.models.Rooms.setJoinCodeById rid, String(value)
+				when 'unjoinable'
+					RocketChat.models.Rooms.setUnjoinableById rid, value
 				when 'default'
 					RocketChat.models.Rooms.saveDefaultById rid, value
 
