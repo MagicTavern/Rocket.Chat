@@ -81,9 +81,17 @@ Meteor.methods({
 });
 
 RocketChat.models.Rooms.cache.on('sync', (type, room/*, diff*/) => {
-	const records = RocketChat.models.Subscriptions.findByRoomId(room._id).fetch();
-	for (const record of records) {
-		RocketChat.Notifications.notifyUserInThisInstance(record.u._id, 'rooms-changed', type, roomMap({_room: room}));
+	if (room.t === 'c') {
+		console.log('channel updated, notify all users')
+		const users = RocketChat.models.Users.findAllIds().fetch();
+		for (const user of users) {
+			RocketChat.Notifications.notifyUserInThisInstance(user._id, 'rooms-changed', type, roomMap({_room: room}));
+		}
+	} else {
+		const records = RocketChat.models.Subscriptions.findByRoomId(room._id).fetch();
+		for (const record of records) {
+			RocketChat.Notifications.notifyUserInThisInstance(record.u._id, 'rooms-changed', type, roomMap({_room: room}));
+		}
 	}
 });
 

@@ -40,6 +40,9 @@ class ModelUsers extends RocketChat.models._Base
 
 
 	# FIND
+	findAllIds: () ->
+		return @find {}, {"_id": 1}
+
 	findById: (userId) ->
 		query =
 			_id: userId
