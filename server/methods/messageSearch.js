@@ -105,6 +105,17 @@ Meteor.methods({
 			limit: limit || 20
 		};
 
+		// check permissions
+		const room = Meteor.call('canAccessRoom', rid, currentUserId);
+
+		if (!room) {
+			return result;
+		}
+
+		if (room.t === 'c' && !RocketChat.authz.hasPermission(currentUserId, 'preview-c-room') && room.usernames.indexOf(room.username) === -1) {
+			return result;
+		}
+
 		// Query for senders
 		from = [];
 		text = text.replace(/from:([a-z0-9.-_]+)/ig, function(match, username) {
