@@ -3,6 +3,18 @@ Meteor.publish('roomFiles', function(rid, limit = 50) {
 		return this.ready();
 	}
 
+	// check permissions
+
+	const room = Meteor.call('canAccessRoom', rid, this.userId);
+
+	if (!room) {
+		return this.ready();
+	}
+
+	if (room.t === 'c' && !RocketChat.authz.hasPermission(this.userId, 'preview-c-room') && room.usernames.indexOf(room.username) === -1) {
+		return this.ready();
+	}
+
 	const pub = this;
 
 	const cursorFileListHandle = RocketChat.models.Uploads.findNotHiddenFilesOfRoom(rid, limit).observeChanges({
