@@ -116,6 +116,10 @@ Meteor.methods({
 			return result;
 		}
 
+		if (room.t === 'c' && room.unjoinable === true && room.usernames.indexOf(room.username) === -1) {
+			return result;
+		}
+
 		// Query for senders
 		from = [];
 		text = text.replace(/from:([a-z0-9.-_]+)/ig, function(match, username) {
