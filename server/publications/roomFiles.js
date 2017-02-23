@@ -15,6 +15,10 @@ Meteor.publish('roomFiles', function(rid, limit = 50) {
 		return this.ready();
 	}
 
+	if (room.t === 'c' && room.unjoinable === true && room.usernames.indexOf(room.username) === -1) {
+		return this.ready();
+	}
+
 	const pub = this;
 
 	const cursorFileListHandle = RocketChat.models.Uploads.findNotHiddenFilesOfRoom(rid, limit).observeChanges({
