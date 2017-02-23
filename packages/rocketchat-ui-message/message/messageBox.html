@@ -116,7 +116,7 @@
 		{{else}}
 			{{#if unjoinable}}
 			<div>
-				{{{_ "room_not_joinable" room_name=roomName}}}
+				{{{_ "room_not_joinable" room_name=roomName room_owner_username=roomOwnerUsername}}}
 			</div>
 			{{else}}
 				{{#if canJoin}}

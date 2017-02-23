@@ -17,6 +17,10 @@ Template.messageBox.helpers
 			return ChatSubscription.findOne({ rid: this._id }, { fields: { name: 1 } })?.name
 		else
 			return roomData.name
+	roomOwnerUsername: ->
+		roomData = Session.get('roomData' + this._id)
+		return '' unless roomData
+		return roomData.u.username
 	showMarkdown: ->
 		return RocketChat.Markdown
 	showMarkdownCode: ->
