@@ -158,7 +158,7 @@ Template.room.helpers
 		if room.t isnt 'c'
 			return true
 
-		if RocketChat.authz.hasAllPermission('preview-c-room')
+		if RocketChat.authz.hasAllPermission('preview-c-room') and not room.unjoinable
 			return true
 
 		return RocketChat.models.Subscriptions.findOne({rid: this._id})?

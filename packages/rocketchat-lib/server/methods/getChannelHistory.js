@@ -17,6 +17,12 @@ Meteor.methods({
 			return false;
 		}
 
+		// Check if the room is unjoinable
+		if (room.t === 'c' && room.unjoinable===true && room.usernames.indexOf(room.username) === -1) {
+			console.log('cannot get history! room is unjoinable!');
+			return false;
+		}
+
 		//Ensure latest is always defined.
 		if (_.isUndefined(latest)) {
 			latest = new Date();

@@ -38,6 +38,10 @@ Meteor.methods({
 			return false;
 		}
 
+		if (room.t === 'c' && room.unjoinable === true && room.usernames.indexOf(room.username) === -1) {
+			return false;
+		}
+
 		const options = {
 			sort: {
 				ts: -1
