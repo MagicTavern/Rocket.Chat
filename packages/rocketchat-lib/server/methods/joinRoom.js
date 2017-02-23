@@ -21,6 +21,10 @@ Meteor.methods({
 			throw new Meteor.Error('error-code-invalid', 'Invalid Code', { method: 'joinRoom' });
 		}
 
+		if (room.unjoinable === true) {
+			throw new Meteor.Error('error-unjoinable', 'Room Unjoinable', { method: 'joinRoom' });
+		}
+
 		return RocketChat.addUserToRoom(rid, Meteor.user());
 	}
 });
