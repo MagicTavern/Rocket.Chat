@@ -16,6 +16,7 @@ Meteor.methods({
 		const options = {
 			fields: {
 				name: 1,
+				topic: 1,
 				t: 1
 			},
 			sort: {

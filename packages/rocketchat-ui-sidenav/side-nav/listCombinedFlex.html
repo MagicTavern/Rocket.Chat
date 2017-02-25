@@ -46,9 +46,10 @@
 			<ul>
 				{{#each channel}}
 					<li>
-						<a href="{{pathFor url name=name}}" class="channel-link">
+						<a href="{{pathFor url name=name}}" class="channel-link" title="{{name}} - {{topic}}">
 							<i class="{{roomIcon}}"></i>
 							{{name}}
+                            <span class="list-room-topic">{{topic}}</span>
 							<span class='opt fixed'>
 								{{#if member}}
 								<i class="icon-eye" title="{{_ "Open"}}" aria-label="{{_ "Open"}}"></i>

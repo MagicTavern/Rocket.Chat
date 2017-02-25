@@ -1,11 +1,12 @@
 <template name="chatRoomItem">
 	<li class="link-room-{{rid}} background-transparent-darker-hover {{active}} {{#if unread}}has-unread{{/if}} {{#if alert}}has-alert{{/if}}">
-		<a class="open-room" href="{{route}}" title="{{name}}">
+		<a class="open-room" href="{{route}}" title="{{name}} - {{topic}}">
 			{{#if unread}}
 				<span class="unread">{{unread}}</span>
 			{{/if}}
 			<i class="{{roomIcon}} {{userStatus}}" aria-label=""></i>
 			<span class='name {{archived}}'>{{name}}</span>
+            <span class="list-room-topic">{{topic}}</span>
 			{{#if $not unread}}
 				<span class='opt'>
 					<i class="icon-eye-off hide-room" title="{{_ "Hide_room"}}" aria-label="{{_ "Hide_room"}}"></i>

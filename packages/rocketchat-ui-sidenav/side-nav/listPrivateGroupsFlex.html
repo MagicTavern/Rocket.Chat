@@ -27,9 +27,10 @@
 			<ul>
 				{{#each groups}}
 					<li>
-						<a href="{{pathFor 'group' name=name}}" class="channel-link">
+						<a href="{{pathFor 'group' name=name}}" class="channel-link" title="{{name}} - {{topic}}">
 							<i class="icon-lock"></i>
 							{{name}}
+                            <span class="list-room-topic">{{topic}}</span>
 							<span class='opt fixed'>
 								{{#if hidden}}
 								<i class="icon-eye-off" title="{{_ "Hidden"}}" aria-label="{{_ "Hidden"}}"></i>

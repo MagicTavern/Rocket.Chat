@@ -15,6 +15,9 @@ Template.chatRoomItem.helpers
 	name: ->
 		return this.name
 
+	topic: ->
+		return RocketChat.roomUtil.getRoomTopic(this.rid)
+
 	roomIcon: ->
 		return RocketChat.roomTypes.getIcon this.t
 
