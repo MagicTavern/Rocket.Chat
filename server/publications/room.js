@@ -46,12 +46,12 @@ Meteor.methods({
 
 		if (updatedAt instanceof Date) {
 			return {
-				update: RocketChat.models.Rooms.findBySubscriptionUserIdUpdatedAfter(Meteor.userId(), updatedAt, options).fetch(),
+				update: RocketChat.models.Rooms.findBySubscriptionUserIdUpdatedAfter(Meteor.userId(), updatedAt, options, true).fetch(),
 				remove: RocketChat.models.Rooms.trashFindDeletedAfter(updatedAt, {}, {fields: {_id: 1, _deletedAt: 1}}).fetch()
 			};
 		}
 
-		return RocketChat.models.Rooms.findBySubscriptionUserId(Meteor.userId(), options).fetch();
+		return RocketChat.models.Rooms.findBySubscriptionUserId(Meteor.userId(), options, true).fetch();
 	},
 
 	getRoomByTypeAndName(type, name) {

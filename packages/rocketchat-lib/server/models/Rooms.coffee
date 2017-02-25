@@ -86,7 +86,7 @@ class ModelRooms extends RocketChat.models._Base
 
 		return @find query, options
 
-	findBySubscriptionUserId: (userId, options) ->
+	findBySubscriptionUserId: (userId, options, incAllChannels = false) ->
 		if this.useCache
 			data = RocketChat.models.Subscriptions.findByUserId(userId).fetch()
 			data = data.map (item) ->
@@ -94,25 +94,37 @@ class ModelRooms extends RocketChat.models._Base
 					return item._room
 				console.log('Empty Room for Subscription', item);
 				return {}
+			if incAllChannels
+				channels = RocketChat.models.Rooms.find({t: 'c'}).fetch()
+				data = _.union(data, channels)
+				data = _.unique(data, false, (item)->item._id)
 			return this.arrayToCursor this.processQueryOptionsOnResult(data, options)
 
 		data = RocketChat.models.Subscriptions.findByUserId(userId, {fields: {rid: 1}}).fetch()
 		data = data.map (item) -> item.rid
 
-		query =
-			_id:
-				$in: data
+		query = {}
+
+		if incAllChannels
+			query.$or = [ {_id: {$in: ids}}, {t: 'c'} ]
+		else
+			query._id =
+				$in: ids
 
 		this.find query, options
 
-	findBySubscriptionUserIdUpdatedAfter: (userId, _updatedAt, options) ->
+	findBySubscriptionUserIdUpdatedAfter: (userId, _updatedAt, options, incAllChannels = false) ->
 		if this.useCache
-			data = RocketChat.models.Subscriptions.findByUserId(userId).fetch()
+			data = RocketChat.models.Subscriptions.findByTypeAndUserId(userId).fetch()
 			data = data.map (item) ->
 				if item._room
 					return item._room
 				console.log('Empty Room for Subscription', item);
 				return {}
+			if incAllChannels
+				channels = RocketChat.models.Rooms.find({t: 'c'}).fetch()
+				data = _.union(data, channels)
+				data = _.unique(data, false, (item)->item._id)
 			data = data.filter (item) -> item._updatedAt > _updatedAt
 			return this.arrayToCursor this.processQueryOptionsOnResult(data, options)
 
@@ -120,10 +132,14 @@ class ModelRooms extends RocketChat.models._Base
 		ids = ids.map (item) -> item.rid
 
 		query =
-			_id:
-				$in: ids
 			_updatedAt:
 				$gt: _updatedAt
+
+		if incAllChannels
+			query.$or = [ {_id: {$in: ids}}, {t: 'c'} ]
+		else
+			query._id =
+				$in: ids
 
 		this.find query, options
 
