@@ -69,27 +69,15 @@ Template.listChannelsFlex.onCreated ->
 	@show = new ReactiveVar 'all'
 
 	@autorun =>
-		if @show.get() is 'joined'
-			@hasMore.set true
-			options =  { fields: { name: 1 } }
-			if _.isNumber @limit.get()
-				options.limit = @limit.get()
-			if _.trim(@sortSubscriptions.get())
-				switch @sortSubscriptions.get()
-					when 'name'
-						options.sort = { name: 1 }
-					when 'ls'
-						options.sort = { ls: -1 }
-			@channelsList.set RocketChat.models.Subscriptions.find({
-				name: new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
-				t: 'c'
-			}, options).fetch()
-			if @channelsList.get().length < @limit.get()
-				@hasMore.set false
-		else
-			Meteor.call 'channelsList', @nameFilter.get(), 'public', @limit.get(), @sortChannels.get(), (err, result) =>
-				if result
-					@hasMore.set true
-					@channelsList.set result.channels
-					if result.channels.length < @limit.get()
-						@hasMore.set false
+		@hasMore.set true
+		limit = null
+		if _.isNumber @limit.get()
+			limit = @limit.get()
+		sort = null
+		if _.trim(@sortSubscriptions.get())
+			sort = @sortSubscriptions.get()
+		nameFilter = new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
+		joined = @show.get() is 'joined'
+		@channelsList.set RocketChat.roomUtil.getRoomList(joined, 'c', nameFilter, sort, limit)
+		if @channelsList.get().length < @limit.get()
+			@hasMore.set false

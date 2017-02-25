@@ -76,34 +76,21 @@ Template.listCombinedFlex.onCreated ->
 	@type = if @t is 'p' then 'group' else 'channel'
 
 	@autorun =>
-		if @show.get() is 'joined'
-			@hasMore.set true
-			options =  { fields: { name: 1, t: 1 } }
-			if _.isNumber @limit.get()
-				options.limit = @limit.get()
-			if _.trim(@sortSubscriptions.get())
-				switch @sortSubscriptions.get()
-					when 'name'
-						options.sort = { name: 1 }
-					when 'ls'
-						options.sort = { ls: -1 }
-			type = {$in: ['c', 'p']}
-			if _.trim(@channelType.get())
-				switch @channelType.get()
-					when 'public'
-						type = 'c'
-					when 'private'
-						type = 'p'
-			@channelsList.set RocketChat.models.Subscriptions.find({
-				name: new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
-				t: type
-			}, options).fetch()
-			if @channelsList.get().length < @limit.get()
-				@hasMore.set false
-		else
-			Meteor.call 'channelsList', @nameFilter.get(), @channelType.get(), @limit.get(), @sortChannels.get(), (err, result) =>
-				if result
-					@hasMore.set true
-					@channelsList.set result.channels
-					if result.channels.length < @limit.get()
-						@hasMore.set false
+		limit = null
+		if _.isNumber @limit.get()
+			limit = @limit.get()
+		sort = null
+		if _.trim(@sortSubscriptions.get())
+			sort = @sortSubscriptions.get()
+		nameFilter = new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
+		joined = @show.get() is 'joined'
+		type = {$in: ['c', 'p']}
+		if _.trim(@channelType.get())
+			switch @channelType.get()
+				when 'public'
+					type = 'c'
+				when 'private'
+					type = 'p'
+		@channelsList.set RocketChat.roomUtil.getRoomList(joined, type, nameFilter, sort, limit)
+		if @channelsList.get().length < @limit.get()
+			@hasMore.set false

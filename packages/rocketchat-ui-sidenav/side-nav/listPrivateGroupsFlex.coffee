@@ -42,22 +42,13 @@ Template.listPrivateGroupsFlex.onCreated ->
 
 	@autorun =>
 		@hasMore.set true
-		options =  { fields: { name: 1 } }
+		limit = null
 		if _.isNumber @limit.get()
-			options.limit = @limit.get()
+			limit = @limit.get()
+		sort = null
 		if _.trim(@sort.get())
-			switch @sort.get()
-				when 'name'
-					options.sort = { name: 1 }
-				when 'ls'
-					options.sort = { ls: -1 }
-
-		query = { t: { $in: ['p']}, f: { $ne: true }, archived: { $ne: true } }
-
-		@groups.set RocketChat.models.Subscriptions.find({
-			name: new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
-			t: 'p'
-			archived: { $ne: true }
-		}, options).fetch()
+			sort = @sort.get()
+		nameFilter = new RegExp s.trim(s.escapeRegExp(@nameFilter.get())), "i"
+		@groups.set RocketChat.roomUtil.getRoomList(true, 'p', nameFilter, sort, limit)
 		if @groups.get().length < @limit.get()
 			@hasMore.set false
