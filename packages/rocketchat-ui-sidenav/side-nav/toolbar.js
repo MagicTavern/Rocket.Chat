@@ -191,5 +191,12 @@ Template.toolbarSearchList.helpers({
 		} else {
 			return 'status-' + (RocketChat.roomTypes.getUserStatus(this.t, this.rid || this._id) || 'offline');
 		}
+	},
+	topic() {
+		if (this.t === 'd') {
+			return '';
+		} else {
+			return RocketChat.roomUtil.getRoomTopic(this.rid || this._id);
+		}
 	}
 });
