@@ -39,6 +39,11 @@ Template.createCombinedFlex.helpers
 	privateSwitchHidden: ->
 		return if RocketChat.authz.hasAllPermission ['create-c', 'create-p'] then '' else 'hidden'
 
+	groupLimitHidden: ->
+		return if RocketChat.settings.get 'Group_Limit_Enable' then '' else 'hidden'
+	groupLimitNumber: ->
+		return RocketChat.settings.get 'Group_Limit_Number'
+
 Template.createCombinedFlex.events
 	'autocompleteselect #channel-members': (event, instance, doc) ->
 		instance.selectedUsers.set instance.selectedUsers.get().concat doc.username
@@ -92,6 +97,14 @@ Template.createCombinedFlex.events
 		createRoute = if privateGroup then 'createPrivateGroup' else 'createChannel'
 		successRoute = if privateGroup then 'group' else 'channel'
 		instance.roomName.set name
+
+		# check group limit
+		if privateGroup and RocketChat.settings.get 'Group_Limit_Enable'
+			limit = RocketChat.settings.get 'Group_Limit_Number'
+			if instance.selectedUsers.get().length > limit
+				instance.error.set({grouplimitexceed: true})
+				return
+
 		if not err
 			Meteor.call createRoute, name, instance.selectedUsers.get(), readOnly, (err, result) ->
 				if err
