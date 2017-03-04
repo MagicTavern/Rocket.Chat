@@ -115,7 +115,7 @@ class ModelRooms extends RocketChat.models._Base
 
 	findBySubscriptionUserIdUpdatedAfter: (userId, _updatedAt, options, incAllChannels = false) ->
 		if this.useCache
-			data = RocketChat.models.Subscriptions.findByTypeAndUserId(userId).fetch()
+			data = RocketChat.models.Subscriptions.findByUserId(userId).fetch()
 			data = data.map (item) ->
 				if item._room
 					return item._room
