@@ -39,6 +39,12 @@ Template.createCombinedFlex.helpers
 	privateSwitchHidden: ->
 		return if RocketChat.authz.hasAllPermission ['create-c', 'create-p'] then '' else 'hidden'
 
+	unjoinableSwitchHidden: ->
+		if not RocketChat.authz.hasAllPermission 'create-c'
+			return 'hidden'
+		privateGroup = Template.instance().privateGroup.get()
+		return if privateGroup then 'hidden' else ''
+
 	groupLimitHidden: ->
 		return if RocketChat.settings.get 'Group_Limit_Enable' then '' else 'hidden'
 	groupLimitNumber: ->
@@ -89,6 +95,9 @@ Template.createCombinedFlex.events
 		if $(e.currentTarget).val() is '' and e.keyCode is 13
 			instance.$('.save-channel').click()
 
+	'change #channel-type': (e, instance) ->
+		instance.privateGroup.set instance.find('#channel-type').checked
+
 	'click .save-channel': (e, instance) ->
 		err = SideNav.validate()
 		name = instance.find('#channel-name').value.toLowerCase().trim()
@@ -96,6 +105,7 @@ Template.createCombinedFlex.events
 		readOnly = instance.find('#channel-ro').checked
 		createRoute = if privateGroup then 'createPrivateGroup' else 'createChannel'
 		successRoute = if privateGroup then 'group' else 'channel'
+		unjoinable = if privateGroup then false else instance.find('#unjoinable').checked
 		instance.roomName.set name
 
 		# check group limit
@@ -106,7 +116,7 @@ Template.createCombinedFlex.events
 				return
 
 		if not err
-			Meteor.call createRoute, name, instance.selectedUsers.get(), readOnly, (err, result) ->
+			Meteor.call createRoute, name, instance.selectedUsers.get(), readOnly, {}, unjoinable, (err, result) ->
 				if err
 					console.log err
 					if err.error is 'error-invalid-name'
@@ -138,6 +148,7 @@ Template.createCombinedFlex.onCreated ->
 	instance.selectedUserNames = {}
 	instance.error = new ReactiveVar []
 	instance.roomName = new ReactiveVar ''
+	instance.privateGroup = new ReactiveVar false
 
 	instance.clearForm = ->
 		instance.error.set([])
@@ -146,3 +157,5 @@ Template.createCombinedFlex.onCreated ->
 		instance.find('#channel-name').value = ''
 		instance.find('#channel-type').checked = false;
 		instance.find('#channel-members').value = ''
+		instance.find('#unjoinable').checked = true
+		instance.privateGroup.set false
