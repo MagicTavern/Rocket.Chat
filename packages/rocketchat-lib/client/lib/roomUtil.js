@@ -5,7 +5,7 @@
 RocketChat.roomUtil = new (class RoomUtil {
 
 	constructor() {
-
+		this.init();
 	}
 
 	/**
@@ -77,5 +77,28 @@ RocketChat.roomUtil = new (class RoomUtil {
 	getRoomTopic(rid) {
 		const result = RocketChat.models.Rooms.findOne({_id: rid});
 		return result ? result.topic : '';
+	}
+
+	init() {
+		Meteor.startup(function() {
+			// check for subscription to unjoinable rooms
+			ChatSubscription.find().observe({
+				added: function(record) {
+					const rid = record.rid;
+					const room = ChatRoom.findOne({_id: rid});
+					if (!room || room.t !== 'c' || !room.unjoinable) {
+						return;
+					}
+					const roomHistory = RoomHistoryManager.getRoom(rid);
+					if (!roomHistory || roomHistory.loaded !== 0) {
+						return;
+					}
+					// reset room state
+					RoomManager.getOpenedRoomByRid(rid).streamActive = false;
+					RoomManager.getOpenedRoomByRid(rid).ready = false;
+					RoomHistoryManager.getRoom(rid).loaded = undefined;
+					RoomManager.computation.invalidate();
+				}});
+		});
 	}
 });
