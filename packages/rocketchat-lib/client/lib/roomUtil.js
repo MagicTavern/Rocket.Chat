@@ -12,7 +12,7 @@ RocketChat.roomUtil = new (class RoomUtil {
 	 * Get channels with name and topic
 	 */
 	_getRoomList(roomIds, roomType, nameFilter, sortOption, limit, incAllChannels) {
-		const options = {fields: {name: 1, topic: 1, rid: 1, t: 1}};
+		const options = {fields: {name: 1, topic: 1, rid: 1, t: 1, unjoinable: 1}};
 		if (limit) {
 			options.limit = limit;
 		}

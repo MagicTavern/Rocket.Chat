@@ -90,7 +90,7 @@ Template.room.helpers
 		roomData = Session.get('roomData' + this._id)
 		return '' unless roomData?.t
 
-		return RocketChat.roomTypes.getIcon roomData?.t
+		return RocketChat.roomTypes.getIcon roomData?.t, roomData.unjoinable
 
 	userStatus: ->
 		roomData = Session.get('roomData' + this._id)

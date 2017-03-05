@@ -13,6 +13,8 @@ Template.listChannelsFlex.helpers
 		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: true })
 	hidden: ->
 		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: false })
+	roomIcon: ->
+		return RocketChat.roomTypes.getIcon @t, @unjoinable
 
 Template.listChannelsFlex.events
 	'click header': ->

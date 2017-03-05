@@ -39,7 +39,7 @@
 				{{#each channel}}
 					<li>
 						<a href="{{pathFor 'channel' name=name}}" class="channel-link" title="{{name}} - {{topic}}">
-							<i class="icon-hash"></i>
+							<i class="{{roomIcon}}"></i>
 							{{name}}
                             <span class="list-room-topic">{{topic}}</span>
 							<span class='opt fixed'>

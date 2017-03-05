@@ -10,8 +10,8 @@ RocketChat.roomTypes = new class roomTypesClient extends roomTypesCommon
 
 		return orderedTypes
 
-	getIcon: (roomType) ->
-		return @roomTypes[roomType]?.icon
+	getIcon: (roomType, unjoinable = false) ->
+		return if roomType is 'c' and unjoinable is true then 'icon-circle-empty' else @roomTypes[roomType]?.icon
 
 	getRoomName: (roomType, roomData) ->
 		return @roomTypes[roomType]?.roomName roomData

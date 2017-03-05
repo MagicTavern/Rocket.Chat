@@ -16,7 +16,7 @@ Template.listCombinedFlex.helpers
 	hidden: ->
 		return !!RocketChat.models.Subscriptions.findOne({ name: @name, open: false })
 	roomIcon: ->
-		return RocketChat.roomTypes.getIcon @t
+		return RocketChat.roomTypes.getIcon @t, @unjoinable
 	url: ->
 		return if @t is 'p' then 'group' else 'channel'
 

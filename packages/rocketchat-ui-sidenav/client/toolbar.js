@@ -206,7 +206,14 @@ Template.toolbar.events({
 
 Template.toolbarSearchList.helpers({
 	icon() {
-		return RocketChat.roomTypes.getIcon(this.t);
+		let unjoinable = false;
+		if (this.t === 'c') {
+			const roomData = Session.get('roomData' + this.rid);
+			if (roomData) {
+				unjoinable = roomData.unjoinable;
+			}
+		}
+		return RocketChat.roomTypes.getIcon(this.t, unjoinable);
 	},
 	userStatus() {
 		if (this.t === 'd') {

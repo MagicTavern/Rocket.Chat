@@ -19,7 +19,8 @@ Template.chatRoomItem.helpers
 		return RocketChat.roomUtil.getRoomTopic(this.rid)
 
 	roomIcon: ->
-		return RocketChat.roomTypes.getIcon this.t
+		roomData = Session.get('roomData' + this.rid)
+		return RocketChat.roomTypes.getIcon this.t, roomData.unjoinable
 
 	active: ->
 		if Session.get('openedRoom') is this.rid
