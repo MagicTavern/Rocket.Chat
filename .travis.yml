@@ -6,6 +6,7 @@ branches:
   only:
   - develop
   - experimental
+  - travis_test
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 git:
   depth: 1
