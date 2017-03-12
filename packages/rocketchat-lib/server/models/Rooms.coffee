@@ -86,7 +86,7 @@ class ModelRooms extends RocketChat.models._Base
 
 		return @find query, options
 
-	findBySubscriptionUserId: (userId, options, incAllChannels = false) ->
+	findBySubscriptionUserId: (userId, options, incAllChannelsAndGroups = false) ->
 		if this.useCache
 			data = RocketChat.models.Subscriptions.findByUserId(userId).fetch()
 			data = data.map (item) ->
@@ -94,8 +94,8 @@ class ModelRooms extends RocketChat.models._Base
 					return item._room
 				console.log('Empty Room for Subscription', item);
 				return {}
-			if incAllChannels
-				channels = RocketChat.models.Rooms.find({t: 'c'}).fetch()
+			if incAllChannelsAndGroups
+				channels = RocketChat.models.Rooms.find({t: {$in: ['c', 'p']}}).fetch()
 				data = _.union(data, channels)
 				data = _.unique(data, false, (item)->item._id)
 			return this.arrayToCursor this.processQueryOptionsOnResult(data, options)
@@ -113,7 +113,7 @@ class ModelRooms extends RocketChat.models._Base
 
 		this.find query, options
 
-	findBySubscriptionUserIdUpdatedAfter: (userId, _updatedAt, options, incAllChannels = false) ->
+	findBySubscriptionUserIdUpdatedAfter: (userId, _updatedAt, options, incAllChannelsAndGroups = false) ->
 		if this.useCache
 			data = RocketChat.models.Subscriptions.findByUserId(userId).fetch()
 			data = data.map (item) ->
@@ -121,8 +121,8 @@ class ModelRooms extends RocketChat.models._Base
 					return item._room
 				console.log('Empty Room for Subscription', item);
 				return {}
-			if incAllChannels
-				channels = RocketChat.models.Rooms.find({t: 'c'}).fetch()
+			if incAllChannelsAndGroups
+				channels = RocketChat.models.Rooms.find({t: {$in: ['c', 'p']}}).fetch()
 				data = _.union(data, channels)
 				data = _.unique(data, false, (item)->item._id)
 			data = data.filter (item) -> item._updatedAt > _updatedAt
@@ -135,7 +135,7 @@ class ModelRooms extends RocketChat.models._Base
 			_updatedAt:
 				$gt: _updatedAt
 
-		if incAllChannels
+		if incAllChannelsAndGroups
 			query.$or = [ {_id: {$in: ids}}, {t: 'c'} ]
 		else
 			query._id =

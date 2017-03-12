@@ -82,7 +82,7 @@ Meteor.methods({
 });
 
 RocketChat.models.Rooms.cache.on('sync', (type, room/*, diff*/) => {
-	if (room.t === 'c') {
+	if (room.t === 'c' || room.t === 'p') {
 		const users = RocketChat.models.Users.findAllIds().fetch();
 		for (const user of users) {
 			RocketChat.Notifications.notifyUserInThisInstance(user._id, 'rooms-changed', type, roomMap({_room: room}));

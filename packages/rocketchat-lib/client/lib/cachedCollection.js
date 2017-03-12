@@ -319,7 +319,7 @@ class CachedCollection {
 
 	setupListener(eventType, eventName) {
 		RocketChat.Notifications[eventType || this.eventType](eventName || this.eventName, (t, record) => {
-			this.log('record received', t, record);
+			// this.log('record received', t, record);
 			if (t === 'removed') {
 				this.collection.remove(record._id);
 			} else {

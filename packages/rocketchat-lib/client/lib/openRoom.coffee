@@ -40,6 +40,14 @@ currentTracker = undefined
 
 				return
 
+			# check group subscription, since we have all groups information cached
+			if room.t is 'p'
+				subs = ChatSubscription.find({'u._id': Meteor.userId(), 'rid': room._id}).fetch();
+				if subs is null or subs.length is 0
+					Session.set 'roomNotFound', {type: type, name: name}
+					BlazeLayout.render 'main', {center: 'roomNotFound'}
+					return
+
 			mainNode = document.querySelector('.main-content')
 			if mainNode?
 				for child in mainNode.children
