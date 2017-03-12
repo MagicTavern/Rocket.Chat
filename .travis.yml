@@ -6,6 +6,7 @@ branches:
   only:
   - develop
   - experimental
+  - magictavern
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 git:
   depth: 1
