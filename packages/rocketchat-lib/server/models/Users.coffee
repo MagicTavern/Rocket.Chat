@@ -58,6 +58,12 @@ class ModelUsers extends RocketChat.models._Base
 
 		return @find query, options
 
+	findAllUsers: (options) ->
+		query =
+			username:
+				$exists: 1
+
+		return @find query, options
 
 	findByUsername: (username, options) ->
 		query =

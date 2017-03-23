@@ -13,7 +13,14 @@ Template.chatRoomItem.helpers
 		return 'status-' + (userStatus or 'offline')
 
 	name: ->
-		return this.name
+		if this.t is 'd'
+			user = RocketChat.models.Users.findOne({username: this.name})
+			if not user
+				return this.name
+			else
+				return user.name
+		else
+			return this.name
 
 	topic: ->
 		return RocketChat.roomUtil.getRoomTopic(this.rid)

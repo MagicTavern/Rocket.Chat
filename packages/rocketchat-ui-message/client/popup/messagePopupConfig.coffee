@@ -6,14 +6,22 @@ Meteor.startup ->
 			return
 
 		filteredUsersMemory.remove({})
-		messageUsers = RocketChat.models.Messages.find({rid: Session.get('openedRoom'), 'u.username': {$ne: Meteor.user().username}}, {fields: {'u.username': 1, ts: 1}, sort: {ts: -1}}).fetch()
+		messageUsers = RocketChat.models.Messages.find({rid: Session.get('openedRoom'), 'u.username': {$ne: Meteor.user().username}}, {fields: {'u.username': 1, alias: 1, ts: 1}, sort: {ts: -1}}).fetch()
 		uniqueMessageUsersControl = {}
 		messageUsers.forEach (messageUser) ->
 			if not uniqueMessageUsersControl[messageUser.u.username]?
 				uniqueMessageUsersControl[messageUser.u.username] = true
+				name = messageUser.u.username
+				if messageUser.alias
+					name = messageUser.alias
+				else
+					user = RocketChat.models.Users.findOne({username: name})
+					if (user)
+						name = user.name
 				filteredUsersMemory.upsert messageUser.u.username,
 					_id: messageUser.u.username
 					username: messageUser.u.username
+					name: name
 					status: Session.get('user_' + messageUser.u.username + '_status') or 'offline'
 					ts: messageUser.ts
 
@@ -30,6 +38,7 @@ getUsersFromServer = (filter, records, cb) =>
 					records.push
 						_id: result.username
 						username: result.username
+						name: result.name
 						status: 'offline'
 						sort: 3
 
@@ -75,11 +84,12 @@ Template.messagePopupConfig.helpers
 				# Get online users
 				if items.length < 5 and filter?.trim() isnt ''
 					messageUsers = _.pluck(items, 'username')
-					Meteor.users.find({$and: [{username: exp}, {username: {$nin: [Meteor.user()?.username].concat(messageUsers)}}]}, {limit: 5 - messageUsers.length}).fetch().forEach (item) ->
+					RocketChat.models.Users.find({$and: [{username: exp}, {username: {$nin: [Meteor.user()?.username].concat(messageUsers)}}]}, {limit: 5 - messageUsers.length}).fetch().forEach (item) ->
 						items.push
 							_id: item.username
 							username: item.username
 							status: item.status
+							name: item.name
 							sort: 1
 
 				# # Get users of room

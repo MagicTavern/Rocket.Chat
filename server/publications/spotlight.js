@@ -15,6 +15,7 @@ Meteor.methods({
 			result.users = RocketChat.models.Users.findByActiveUsersUsernameExcept(text, usernames, {
 				limit: 5,
 				fields: {
+					name: 1,
 					username: 1,
 					status: 1
 				},

@@ -228,7 +228,8 @@ Template.toolbarSearchList.helpers({
 	},
 	topic() {
 		if (this.t === 'd') {
-			return '';
+			const user = RocketChat.models.Users.findOne({username: this.name});
+			return user ? user.name : '';
 		} else {
 			return RocketChat.roomUtil.getRoomTopic(this.rid || this._id);
 		}
