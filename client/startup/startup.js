@@ -19,7 +19,7 @@ Meteor.startup(function() {
 
 	UserPresence.awayTime = 300000;
 	UserPresence.start();
-	Meteor.subscribe('activeUsers');
+	Meteor.subscribe('allUsers');
 
 	Session.setDefault('AvatarRandom', 0);
 
