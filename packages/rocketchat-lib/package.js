@@ -184,6 +184,7 @@ Package.onUse(function(api) {
 	api.addFiles('client/lib/userRoles.js', 'client');
 	api.addFiles('client/lib/Layout.js', 'client');
 	api.addFiles('client/lib/roomUtil.js', 'client');
+	api.addFiles('client/lib/userUtil.js', 'client');
 
 	// CLIENT METHODS
 	api.addFiles('client/methods/sendMessage.coffee', 'client');

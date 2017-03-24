@@ -10,7 +10,7 @@ Template.accountBox.helpers
 			when "offline"
 				visualStatus = t("invisible")
 		return {
-			name: Session.get('user_' + username + '_name')
+			name: RocketChat.userUtil.getName(username)
 			status: Session.get('user_' + username + '_status')
 			visualStatus: visualStatus
 			_id: Meteor.userId()
