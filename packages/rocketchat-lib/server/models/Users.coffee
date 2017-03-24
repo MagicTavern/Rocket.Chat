@@ -136,6 +136,27 @@ class ModelUsers extends RocketChat.models._Base
 
 		return @find query, options
 
+	findByActiveUsersNameOrUsernameExceptUsernames: (searchTerm, exceptions = [], options = {}) ->
+		if not _.isArray exceptions
+			exceptions = [ exceptions ]
+
+		termRegex = new RegExp s.escapeRegExp(searchTerm), 'i'
+		query =
+			$and: [
+				{
+					active: true
+					$or: [
+						{username: termRegex}
+						{name: termRegex}
+					]
+				}
+				{
+					username: { $nin: exceptions }
+				}
+			]
+
+		return @find query, options
+
 	findUsersByNameOrUsername: (nameOrUsername, options) ->
 		query =
 			username:

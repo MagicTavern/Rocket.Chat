@@ -12,7 +12,7 @@ Meteor.methods({
 		const regex = new RegExp(s.trim(s.escapeRegExp(text)), 'i');
 
 		if (type.users === true && RocketChat.authz.hasPermission(this.userId, 'view-d-room')) {
-			result.users = RocketChat.models.Users.findByActiveUsersUsernameExcept(text, usernames, {
+			result.users = RocketChat.models.Users.findByActiveUsersNameOrUsernameExceptUsernames(text, usernames, {
 				limit: 5,
 				fields: {
 					name: 1,
