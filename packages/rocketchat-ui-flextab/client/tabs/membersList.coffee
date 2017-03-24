@@ -34,11 +34,14 @@ Template.membersList.helpers
 					else
 						utcOffset = "(UTC #{utcOffset})"
 
+			user = RocketChat.models.Users.findOne({username: username})
+			name = if user then user.name else username
 			return {
 				username: username
 				status: onlineUsers[username]?.status
 				muted: username in roomMuted
 				utcOffset: utcOffset
+				name: name
 			}
 
 		users = _.sortBy users, 'username'
