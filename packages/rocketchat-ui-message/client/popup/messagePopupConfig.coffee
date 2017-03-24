@@ -15,9 +15,7 @@ Meteor.startup ->
 				if messageUser.alias
 					name = messageUser.alias
 				else
-					user = RocketChat.models.Users.findOne({username: name})
-					if (user)
-						name = user.name
+					name = RocketChat.userUtil.getName name
 				filteredUsersMemory.upsert messageUser.u.username,
 					_id: messageUser.u.username
 					username: messageUser.u.username

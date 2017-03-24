@@ -14,11 +14,7 @@ Template.chatRoomItem.helpers
 
 	name: ->
 		if this.t is 'd'
-			user = RocketChat.models.Users.findOne({username: this.name})
-			if not user
-				return this.name
-			else
-				return user.name
+			return RocketChat.userUtil.getName this.name
 		else
 			return this.name
 

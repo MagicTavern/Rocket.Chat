@@ -66,10 +66,7 @@ RocketChat.roomTypes.add('d', 20, {
 	roomName(roomData) {
 		const room = ChatSubscription.findOne({ rid: roomData._id }, { fields: { name: 1 } });
 		if (room) {
-			const user = RocketChat.models.Users.findOne({username: room.name});
-			if (user) {
-				return user.name;
-			}
+			return RocketChat.userUtil.getName(room.name);
 		}
 		return room && room.name;
 	},
