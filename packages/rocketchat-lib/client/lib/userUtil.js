@@ -14,7 +14,7 @@ RocketChat.userUtil = new (class UserUtil {
 	 * @returns {*}
 	 */
 	getName(username) {
-		const user = RocketChat.models.Users.findOne({username: username}, {fields: {name: 1}});
+		const user = RocketChat.models.Users.findOne({username}, {fields: {name: 1}});
 		return user ? user.name : username;
 	}
 

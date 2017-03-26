@@ -23,6 +23,12 @@ Meteor.startup(function() {
 
 	Session.setDefault('AvatarRandom', 0);
 
+	// Initialize room sort type
+	if (!localStorage.getItem('RoomSortType')) {
+		localStorage.setItem('RoomSortType', 'name');
+	}
+	Session.set('RoomSortType', localStorage.getItem('RoomSortType'));
+
 	window.lastMessageWindow = {};
 	window.lastMessageWindowHistory = {};
 
@@ -69,7 +75,7 @@ Meteor.startup(function() {
 		language = language.toLowerCase();
 		if (language !== 'en') {
 			Meteor.call('loadLocale', language, (err, localeFn) => {
-				Function(localeFn).call({moment: moment});
+				Function(localeFn).call({moment});
 				moment.locale(language);
 			});
 		}

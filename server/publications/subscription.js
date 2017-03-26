@@ -22,7 +22,8 @@ const fields = {
 	blocked: 1,
 	blocker: 1,
 	autoTranslate: 1,
-	autoTranslateLanguage: 1
+	autoTranslateLanguage: 1,
+	la: 1 // last activity time
 };
 
 Meteor.methods({
@@ -34,7 +35,7 @@ Meteor.methods({
 		this.unblock();
 
 		const options = {
-			fields: fields
+			fields
 		};
 
 		const records = RocketChat.models.Subscriptions.findByUserId(Meteor.userId(), options).fetch();
@@ -60,6 +61,6 @@ Meteor.methods({
 
 RocketChat.models.Subscriptions.on('changed', function(type, subscription) {
 	return RocketChat.Notifications.notifyUserInThisInstance(subscription.u._id, 'subscriptions-changed', type, RocketChat.models.Subscriptions.processQueryOptionsOnResult(subscription, {
-		fields: fields
+		fields
 	}));
 });

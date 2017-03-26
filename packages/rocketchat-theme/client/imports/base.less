@@ -1704,6 +1704,22 @@ label.required::after {
 	}
 }
 
+.toolbar-sort {
+	padding-left: 8px;
+	height: 20px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+
+	i {
+		width: 20px;
+		height: 20px;
+		line-height: 20px;
+		text-align: center;
+		cursor: pointer;
+	}
+}
+
 .new-room-highlight a {
 	-webkit-animation: highlight 2s infinite;
 	-moz-animation: highlight 2s infinite;
@@ -2395,7 +2411,8 @@ label.required::after {
 			padding-bottom: 9px;
 			padding-left: 49px;
 			border-radius: 0;
-			overflow-y: hidden;
+			overflow-y: auto;
+			max-height: 155px;
 			resize: none;
 			line-height: 16px;
 			border-width: 0 1px 0 0;

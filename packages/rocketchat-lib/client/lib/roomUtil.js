@@ -83,7 +83,7 @@ RocketChat.roomUtil = new (class RoomUtil {
 		Meteor.startup(function() {
 			// check for subscription to unjoinable rooms
 			ChatSubscription.find().observe({
-				added: function(record) {
+				added(record) {
 					const rid = record.rid;
 					const room = ChatRoom.findOne({_id: rid});
 					if (!room || room.t !== 'c' || !room.unjoinable) {
