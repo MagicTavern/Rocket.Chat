@@ -133,7 +133,7 @@ Template.createCombinedFlex.events({
 		// check group limit
 		if (privateGroup && RocketChat.settings.get('Group_Limit_Enable')) {
 			const limit = RocketChat.settings.get('Group_Limit_Number');
-			if (instance.selectedUsers.get().length > limit) {
+			if (instance.selectedUsers.get().length + 1 > limit) {
 				instance.error.set({grouplimitexceed: true});
 				return;
 			}

@@ -27,6 +27,10 @@ Template.chatRoomItem.helpers({
 		}
 	},
 
+	topic() {
+		return RocketChat.roomUtil.getRoomTopic(this.rid);
+	},
+
 	roomIcon() {
 		const roomData = Session.get(`roomData${ this.rid }`);
 		return RocketChat.roomTypes.getIcon(this.t, roomData.unjoinable);

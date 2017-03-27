@@ -93,42 +93,21 @@ Template.listChannelsFlex.onCreated(function() {
 	this.show = new ReactiveVar('all');
 
 	return this.autorun(() => {
-		if (this.show.get() === 'joined') {
 			this.hasMore.set(true);
-			const options = { fields: { name: 1 } };
+			let limit = null;
 			if (_.isNumber(this.limit.get())) {
-				options.limit = this.limit.get();
+				limit = this.limit.get();
 			}
+			let sort = null;
 			if (_.trim(this.sortSubscriptions.get())) {
-				switch (this.sortSubscriptions.get()) {
-					case 'name':
-						options.sort = { name: 1 };
-						break;
-					case 'ls':
-						options.sort = { ls: -1 };
-						break;
-				}
+				sort = this.sortSubscriptions.get();
 			}
-			this.channelsList.set(RocketChat.models.Subscriptions.find({
-				name: new RegExp(s.trim(s.escapeRegExp(this.nameFilter.get())), 'i'),
-				t: 'c'
-			}, options).fetch()
-			);
+			let nameFilter = new RegExp(s.trim(s.escapeRegExp(this.nameFilter.get())), "i");
+			let joined = this.show.get() === 'joined';
+			this.channelsList.set(RocketChat.roomUtil.getRoomList(joined, 'c', nameFilter, sort, limit));
 			if (this.channelsList.get().length < this.limit.get()) {
-				return this.hasMore.set(false);
+				this.hasMore.set(false);
 			}
-		} else {
-			return Meteor.call('channelsList', this.nameFilter.get(), 'public', this.limit.get(), this.sortChannels.get(), (err, result) => {
-				if (result) {
-					this.hasMore.set(true);
-					this.channelsList.set(result.channels);
-					if (result.channels.length < this.limit.get()) {
-						return this.hasMore.set(false);
-					}
-				}
-			}
-			);
 		}
-	}
 	);
 });

@@ -53,31 +53,20 @@ Template.listPrivateGroupsFlex.onCreated(function() {
 	this.sort = new ReactiveVar('name');
 
 	return this.autorun(() => {
-		this.hasMore.set(true);
-		const options = { fields: { name: 1 } };
-		if (_.isNumber(this.limit.get())) {
-			options.limit = this.limit.get();
-		}
-		if (_.trim(this.sort.get())) {
-			switch (this.sort.get()) {
-				case 'name':
-					options.sort = { name: 1 };
-					break;
-				case 'ls':
-					options.sort = { ls: -1 };
-					break;
+			this.hasMore.set(true);
+			let limit = null;
+			if (_.isNumber(this.limit.get())) {
+				limit = this.limit.get();
+			}
+			let sort = null;
+			if (_.trim(this.sort.get())) {
+				sort = this.sort.get();
+			}
+			let nameFilter = new RegExp(s.trim(s.escapeRegExp(this.nameFilter.get())), "i");
+			this.groups.set(RocketChat.roomUtil.getRoomList(true, 'p', nameFilter, sort, limit));
+			if (this.groups.get().length < this.limit.get()) {
+				this.hasMore.set(false);
 			}
 		}
-
-		this.groups.set(RocketChat.models.Subscriptions.find({
-			name: new RegExp(s.trim(s.escapeRegExp(this.nameFilter.get())), 'i'),
-			t: 'p',
-			archived: { $ne: true }
-		}, options).fetch()
-		);
-		if (this.groups.get().length < this.limit.get()) {
-			return this.hasMore.set(false);
-		}
-	}
 	);
 });
