@@ -31,7 +31,9 @@ class MentionsClient
 					if username is me
 						classes += ' mention-link-me background-primary-action-color'
 
-					return match.replace mention, "<a class=\"#{classes}\" data-username=\"#{username}\">#{mention}</a>"
+					name = RocketChat.userUtil.getName username
+
+					return match.replace mention, "<a class=\"#{classes}\" data-username=\"#{username}\">@#{name}</a>"
 
 			channels = []
 			msgChannelRegex = new RegExp '(?:^|\\s|\\n)(?:#)(' + RocketChat.settings.get('UTF8_Names_Validation') + ')', 'g'
