@@ -8,4 +8,4 @@ Template.home.onRendered ->
 	width = document.body.clientWidth
 	if width <= 780 # mobile devices, show room list directly
 		Meteor.defer =>
-			menu.open()
+			window.menu.open()
