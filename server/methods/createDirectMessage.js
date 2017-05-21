@@ -110,5 +110,12 @@ DDPRateLimiter.addRule({
 	name: 'createDirectMessage',
 	connectionId() {
 		return true;
+	},
+	userId(userId) {
+		const user = RocketChat.models.Users.findOneById(userId);
+		if (!user || !user.roles) {
+			return true;
+		}
+		return user.roles.indexOf('bot') < 0;
 	}
 }, 10, 60000);
