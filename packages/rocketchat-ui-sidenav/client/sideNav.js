@@ -30,7 +30,15 @@ Template.sideNav.helpers({
 			userPref = Meteor.user().settings.preferences.mergeChannels;
 		}
 		const globalPref = RocketChat.settings.get('UI_Merge_Channels_Groups');
-		const mergeChannels = (userPref != null) ? userPref : globalPref;
+		const sortByActivity = !Session.equals('RoomSortType', 'name');
+		let mergeChannels = (userPref != null) ? userPref : globalPref;
+
+		mergeChannels = mergeChannels || sortByActivity;
+
+		// hide direct messages when sorting by activity
+		if (sortByActivity && this.template === 'directMessages') {
+			return false;
+		}
 		if (mergeChannels) {
 			return RocketChat.roomTypes.checkCondition(this) && (this.template !== 'privateGroups');
 		} else {
@@ -44,7 +52,9 @@ Template.sideNav.helpers({
 			userPref = Meteor.user().settings.preferences.mergeChannels;
 		}
 		const globalPref = RocketChat.settings.get('UI_Merge_Channels_Groups');
-		const mergeChannels = (userPref != null) ? userPref : globalPref;
+		const sortByActivity = !Session.equals('RoomSortType', 'name');
+		let mergeChannels = (userPref != null) ? userPref : globalPref;
+		mergeChannels = mergeChannels || sortByActivity;
 		if (mergeChannels) {
 			return this.template === 'channels' ? 'combined' : this.template;
 		} else {

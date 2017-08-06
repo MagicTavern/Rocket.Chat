@@ -19,6 +19,11 @@ Template.combined.helpers({
 			query.alert = {$ne: true};
 		}
 
+		// combine channels with direct rooms when sorting by activity
+		if (!Session.equals('RoomSortType', 'name')) {
+			query.t.$in.push('d');
+		}
+
 		let sort;
 		if (Session.equals('RoomSortType', 'name')) {
 			sort = { sort: { 'name': 1 }};
